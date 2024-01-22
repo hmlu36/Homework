@@ -21,7 +21,7 @@ namespace Homework.Middleware
             {
                 requestBody = await reader.ReadToEndAsync();
             }
-            //context.Request.Body = new MemoryStream(Encoding.UTF8.GetBytes(requestBody));
+            context.Request.Body = new MemoryStream(Encoding.UTF8.GetBytes(requestBody));
 
 
             // 處理：將登入資訊寫入 log 檔案

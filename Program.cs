@@ -26,7 +26,7 @@ builder.Services.AddSwaggerGen(options =>
     options.DocumentFilter<EnumDocumentFilter>();
 });
 
-builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddSingleton<IStudentService, StudentService>();
 
 var app = builder.Build();
 

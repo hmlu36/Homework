@@ -26,7 +26,7 @@ builder.Services.AddSwaggerGen(options =>
     options.DocumentFilter<EnumDocumentFilter>();
 });
 
-builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IPetService, PetService>();
 
 var app = builder.Build();
 

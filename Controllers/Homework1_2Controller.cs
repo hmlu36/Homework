@@ -21,15 +21,15 @@ namespace Homework.Controllers
         public IActionResult LoginMember([FromBody] LoginRequest loginRequest)
         {
             // 假設有一個簡單的驗證邏輯，實際應用需檢查使用者帳號密碼是否有效
-            if (loginRequest.Username == "1234" && loginRequest.Password == "1234")
+            if (loginRequest.UserName == "1234" && loginRequest.Password == "1234")
             {
                 // 登入成功
-                _logger.LogInformation($"User '{loginRequest.Username}' logged in at {DateTime.Now}");
+                _logger.LogInformation($"User '{loginRequest.UserName}' logged in at {DateTime.Now}");
                 return Ok(new { Message = "登入成功" });
             }
 
             // 登入失敗
-            _logger.LogWarning($"Failed login attempt for user '{loginRequest.Username}' at {DateTime.Now}");
+            _logger.LogWarning($"Failed login attempt for user '{loginRequest.UserName}' at {DateTime.Now}");
             return Unauthorized(new { Message = "登入失敗" });
         }
     }

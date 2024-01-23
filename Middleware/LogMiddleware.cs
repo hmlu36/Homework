@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using System.Text;
+﻿using System.Text;
 
 namespace Homework.Middleware
 {
@@ -27,7 +26,7 @@ namespace Homework.Middleware
             // 處理：將登入資訊寫入 log 檔案
             if (context.Response.StatusCode == 200)
             {
-                string logMessage = $"{requestBody} at {DateTime.Now}";
+                string logMessage = $"{DateTime.Now} [Debug] Path: {context.Request.Path}. RequestBody: {requestBody}";
                 _logger.LogInformation(logMessage);
 
                 // 寫入 log 檔案

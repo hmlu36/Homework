@@ -2,3 +2,6 @@
 UnitTest/obj
 Homework.Tests/obj
 Homework.Tests/bin
+bin
+obj
+log

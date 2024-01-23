@@ -26,6 +26,11 @@ namespace Homework.Services
             };
         }
 
+        public StudentService(List<Student> students)
+        {
+            _students = students;
+        }
+
         public List<Student> GetAllStudents()
         {
             return _students.ToList();

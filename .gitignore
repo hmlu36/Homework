@@ -1,4 +1,4 @@
 ﻿.vs
-bin
-obj
-log
+UnitTest/obj
+Homework.Tests/obj
+Homework.Tests/bin

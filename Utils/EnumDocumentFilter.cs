@@ -24,11 +24,11 @@ namespace Homework.Utils
                         parameter.Description += "<p>Variants:</p>";
 
                         int cutStart = schema.Description.IndexOf("<ul>");
+                        cutStart = cutStart < 0 ? 0 : cutStart;
 
                         int cutEnd = schema.Description.IndexOf("</ul>") + 5;
 
-                        parameter.Description += schema.Description
-                            .Substring(cutStart, cutEnd - cutStart);
+                        parameter.Description += schema.Description.Substring(cutStart, cutEnd - cutStart);
                     }
                 }
             }

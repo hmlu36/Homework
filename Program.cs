@@ -26,9 +26,7 @@ builder.Services.AddSwaggerGen(options =>
     options.DocumentFilter<EnumDocumentFilter>();
 });
 
-// Dependency Injection
-// 測試CRUD(未使用資料庫)
-builder.Services.AddSingleton<IStudentService, StudentService>();
+builder.Services.AddScoped<IPetService, PetService>();
 
 var app = builder.Build();
 

@@ -8,7 +8,8 @@
 4. 撰寫單元測試功能(UnitTest)，測試CRUD功能是否如預期  
 [.NET Core 和 .NET Standard 的單元測試最佳做法](https://learn.microsoft.com/zh-tw/dotnet/core/testing/unit-testing-best-practices)  
 PS.需寫一個Service，透過Dependency Injection注入Service完成CRUD的功能  
-尚未有資料庫，Service使用Singleton的方式注入Service
+尚未連結資料庫，資料站存在記憶體中
+檢驗新增(Create)完資料後，列表(GetAll)要可以查詢
 
 ## 附註
 補充說明

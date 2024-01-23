@@ -9,9 +9,9 @@
 
 
 ## 附註
-需寫一個Service，透過Dependency Injection注入Service完成CRUD的功能
-因為尚未連結資料庫，資料暫存在記憶體中
-檢驗新增(Create)完資料後，列表(GetAll)要可以查詢
+1. 需寫一個Service，透過Dependency Injection注入Service完成CRUD的功能
+2. 因為尚未連結資料庫，資料暫存在記憶體中
+3. 檢驗新增(Create)完資料後，列表(GetAll)要可以查詢
 
 [swagger註解沒出現的解法](https://stackoverflow.com/questions/65927107/xml-comments-are-not-shown-in-swagger-documentation-is-this-bug-in-swagger)
 [swagger註解寫法參考](https://learn.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-7.0&tabs=visual-studio)

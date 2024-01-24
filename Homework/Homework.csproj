@@ -9,11 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <Compile Remove="log\**" />
+    <Content Remove="log\**" />
+    <EmbeddedResource Remove="log\**" />
+    <None Remove="log\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="log\" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
 </Project>

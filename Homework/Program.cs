@@ -1,6 +1,5 @@
 using Homework.Middleware;
 using Homework.Services;
-using Homework.Utils;
 using System.Reflection;
 using System.Text.Json.Serialization;
 
@@ -21,12 +20,9 @@ builder.Services.AddSwaggerGen(options =>
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     options.IncludeXmlComments(xmlPath);
-
-    options.SchemaFilter<EnumSchemaFilter>();
-    options.DocumentFilter<EnumDocumentFilter>();
 });
 
-builder.Services.AddSingleton<IStudentService, StudentService>();
+builder.Services.AddScoped<IPetService, PetService>();
 
 var app = builder.Build();
 

@@ -2,6 +2,7 @@ using Homework.Enums;
 using Homework.Models;
 using Homework.Services;
 using Xunit.Extensions.Ordering;
+
 //Optional
 [assembly: CollectionBehavior(DisableTestParallelization = true)]
 //Optional
@@ -14,24 +15,26 @@ namespace Homework.Tests;
 /// <summary>
 /// XUnit Dependency Injection
 /// </summary>
-/// ref: https://beetechnical.com/tech-tutorial/xunit-dependency-injection/
+/// ref: https://copyprogramming.com/howto/dependency-injection-in-xunit-project
 public class StudentServiceFixture
 {
     public IStudentService studentService;
+
     public StudentServiceFixture()
     {
         studentService = new StudentService();
     }
 }
 
-public class StudentServiceUnitTest : IClassFixture<StudentServiceFixture>
+public class StudentServiceUnitTest: IClassFixture<StudentServiceFixture>
 {
     private readonly IStudentService _studentService;
+    
     public StudentServiceUnitTest(StudentServiceFixture studentServiceFixture)
     {
         _studentService = studentServiceFixture.studentService;
     }
-
+    
     [Fact, Order(0)]
     public void GetAllTest()
     {
@@ -66,10 +69,20 @@ public class StudentServiceUnitTest : IClassFixture<StudentServiceFixture>
     }
 
     [Fact, Order(4)]
-    public void DeleteTest() {
+    public void DeleteTest()
+    {
         var idNumber = "A001";
         _studentService.DeleteStudent(idNumber);
         var students = _studentService.GetAllStudents();
         Assert.Equal(3, students.Count);
+    }
+
+
+    [Fact, Order(5)]
+    public void DeleteExceptionTest()
+    {
+        var idNumber = "Z001";
+        var ex = Assert.Throws<NullReferenceException>(() => _studentService.DeleteStudent(idNumber));
+        Assert.Equal("資料不存在", ex.Message);
     }
 }

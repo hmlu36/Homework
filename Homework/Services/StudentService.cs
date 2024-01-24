@@ -65,7 +65,7 @@ namespace Homework.Services
             }
             else
             {
-                throw new Exception("學號不存在");
+                throw new NullReferenceException("資料不存在");
             }
             return updatedStudent;
         }
@@ -76,6 +76,10 @@ namespace Homework.Services
             if (studentToRemove != null)
             {
                 _students.Remove(studentToRemove);
+            }
+            else
+            {
+                throw new NullReferenceException("資料不存在");
             }
             return studentToRemove;
         }

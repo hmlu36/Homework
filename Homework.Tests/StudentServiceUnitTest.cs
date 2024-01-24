@@ -1,45 +1,40 @@
 using Homework.Enums;
 using Homework.Models;
 using Homework.Services;
-using Xunit.Extensions.Ordering;
-//Optional
-[assembly: CollectionBehavior(DisableTestParallelization = true)]
-//Optional
-[assembly: TestCaseOrderer("Xunit.Extensions.Ordering.TestCaseOrderer", "Xunit.Extensions.Ordering")]
-//Optional
-[assembly: TestCollectionOrderer("Xunit.Extensions.Ordering.CollectionOrderer", "Xunit.Extensions.Ordering")]
+using Xunit.Microsoft.DependencyInjection;
 
 namespace Homework.Tests;
 
-/// <summary>
-/// XUnit Dependency Injection
-/// </summary>
-/// ref: https://beetechnical.com/tech-tutorial/xunit-dependency-injection/
-public class StudentServiceFixture
+public class StudentServiceFixture : TestBedFixture
 {
-    public IStudentService studentService;
-    public StudentServiceFixture()
+    protected override void AddServices(IServiceCollection services, IConfiguration? configuration)
     {
-        studentService = new StudentService();
+        services.AddSingleton<IStudentService, StudentService>();
+    }
+
+    protected override ValueTask DisposeAsyncCore() => new();
+
+    protected override IEnumerable<TestAppSettings> GetTestAppSettings()
+    {
+        yield return new() { Filename = "appsettings.json", IsOptional = false };
     }
 }
 
-public class StudentServiceUnitTest : IClassFixture<StudentServiceFixture>
+[TestCaseOrderer("Xunit.Microsoft.DependencyInjection.TestsOrder.TestPriorityOrderer", "Xunit.Microsoft.DependencyInjection")]
+public class StudentServiceUnitTest : TestBed<StudentServiceFixture>
 {
     private readonly IStudentService _studentService;
-    public StudentServiceUnitTest(StudentServiceFixture studentServiceFixture)
-    {
-        _studentService = studentServiceFixture.studentService;
-    }
-
-    [Fact, Order(0)]
+    public StudentServiceUnitTest(ITestOutputHelper testOutputHelper, StudentServiceFixture fixture)
+        : base(testOutputHelper, fixture) => _studentService = fixture.GetService<IStudentService>(testOutputHelper);
+    
+    [Fact, TestOrder(0)]
     public void GetAllTest()
     {
         var students = _studentService.GetAllStudents();
         Assert.Equal(3, students.Count);
     }
 
-    [Fact, Order(1)]
+    [Fact, TestOrder(1)]
     public void GetByIdTest()
     {
         var idNumber = "A001";
@@ -47,7 +42,7 @@ public class StudentServiceUnitTest : IClassFixture<StudentServiceFixture>
         Assert.Equal("John", student.Name);
     }
 
-    [Fact, Order(2)]
+    [Fact, TestOrder(2)]
     public void AddStudentTest()
     {
         var student = new Student() { IdNumber = "C001", Name = "Joshua", ClassName = "C", Sex = Sex.Male };
@@ -56,7 +51,7 @@ public class StudentServiceUnitTest : IClassFixture<StudentServiceFixture>
         Assert.Equal(4, students.Count);
     }
 
-    [Fact, Order(3)]
+    [Fact, TestOrder(3)]
     public void UpdateStudentTest()
     {
         var student = new Student() { IdNumber = "A001", Name = "John", ClassName = "C", Sex = Sex.Male };
@@ -65,11 +60,22 @@ public class StudentServiceUnitTest : IClassFixture<StudentServiceFixture>
         Assert.Equal("C", student.ClassName);
     }
 
-    [Fact, Order(4)]
-    public void DeleteTest() {
-        var idNumber = "A001";
+    [Fact, TestOrder(4)]
+    public void DeleteTest()
+    {
+        var idNumber = "C001";
         _studentService.DeleteStudent(idNumber);
         var students = _studentService.GetAllStudents();
         Assert.Equal(3, students.Count);
+    }
+
+
+    [Fact, TestOrder(5)]
+    public void DeleteExceptinTest()
+    {
+        var idNumber = "E001";
+        var ex = Assert.Throws<NullReferenceException>(() => _studentService.DeleteStudent(idNumber));
+        Console.WriteLine(ex.Message);  
+        Assert.Equal("資料不存在", ex.Message);
     }
 }

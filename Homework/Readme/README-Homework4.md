@@ -19,3 +19,6 @@ docker image
 
 - **docker run image 指定 container 名稱**
 docker run --name=homework -d -p 4000:8080 -it homework
+
+- docker compose啟動
+docker-compose -f docker-compose.yml up -d

@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  homework:
+    image: ${DOCKER_REGISTRY-}homework
+    build:
+      context: .
+      dockerfile: Homework/Dockerfile
+    ports:
+      - "4000:8080"

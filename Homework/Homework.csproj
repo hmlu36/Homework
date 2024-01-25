@@ -6,9 +6,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>true</InvariantGlobalization>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<ContainerRepository>Homework</ContainerRepository>
+	<UserSecretsId>47a8883c-ad1f-4aca-b63c-f415220fdb6e</UserSecretsId>
+	<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 

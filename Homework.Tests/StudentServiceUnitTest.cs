@@ -5,6 +5,7 @@ using Xunit.Microsoft.DependencyInjection;
 
 namespace Homework.Tests;
 
+// reference: https://umplify.github.io/xunit-dependency-injection/
 public class StudentServiceFixture : TestBedFixture
 {
     protected override void AddServices(IServiceCollection services, IConfiguration? configuration)

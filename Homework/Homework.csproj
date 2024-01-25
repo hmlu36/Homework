@@ -9,6 +9,7 @@
 	<ContainerRepository>Homework</ContainerRepository>
 	<UserSecretsId>47a8883c-ad1f-4aca-b63c-f415220fdb6e</UserSecretsId>
 	<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	<DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>

@@ -26,16 +26,17 @@ builder.Services.AddSwaggerGen(options =>
     options.DocumentFilter<EnumDocumentFilter>();
 });
 
+builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddSingleton<IStudentService, StudentService>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 app.UseHttpsRedirection();
 

@@ -5,6 +5,7 @@ using Xunit.Microsoft.DependencyInjection;
 
 namespace Homework.Tests;
 
+// reference: https://umplify.github.io/xunit-dependency-injection/
 public class StudentServiceFixture : TestBedFixture
 {
     protected override void AddServices(IServiceCollection services, IConfiguration? configuration)
@@ -73,7 +74,7 @@ public class StudentServiceUnitTest : TestBed<StudentServiceFixture>
     [Fact, TestOrder(5)]
     public void DeleteExceptinTest()
     {
-        var idNumber = "E001";
+        var idNumber = "Z001";
         var ex = Assert.Throws<NullReferenceException>(() => _studentService.DeleteStudent(idNumber));
         Console.WriteLine(ex.Message);  
         Assert.Equal("資料不存在", ex.Message);

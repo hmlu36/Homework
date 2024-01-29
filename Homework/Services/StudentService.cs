@@ -1,5 +1,11 @@
-﻿using Homework.Enums;
+﻿using FreeRedis;
+using Homework.Enums;
 using Homework.Models;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using StackExchange.Redis;
+using System.Text.Json.Serialization;
 
 namespace Homework.Services
 {
@@ -14,54 +20,63 @@ namespace Homework.Services
 
     public class StudentService : IStudentService
     {
-        private readonly List<Student> _students;
+        private readonly string REDIS_KEY = "Student:";
+        //private readonly List<Student> _students;
 
-        public StudentService()
+        private readonly RedisClient _redisClient;
+        private readonly ILogger<StudentService> _logger;
+        public StudentService(IConfiguration configuration, ILogger<StudentService> logger)
         {
-            _students = new List<Student>()
-            {
-                new Student { IdNumber = "A001", ClassName = "A", Name = "John", Sex = Sex.Male },
-                new Student { IdNumber = "A002", ClassName = "A", Name = "Allen", Sex = Sex.Male },
-                new Student { IdNumber = "A003", ClassName = "B", Name = "Alice", Sex = Sex.Female }
-            };
-        }
-
-        public StudentService(List<Student> students)
-        {
-            _students = students;
+            _redisClient = new RedisClient(configuration.GetConnectionString("Redis"));
+            _logger = logger;
         }
 
         public List<Student> GetAllStudents()
         {
-            return _students.ToList();
+            var students = new List<Student>();
+            foreach (var key in _redisClient.Scan($"{REDIS_KEY}*", 100, null).FirstOrDefault())
+            {
+                _logger.LogInformation(key);
+                students.Add(JsonConvert.DeserializeObject<Student>(_redisClient.Get(key)));
+            }
+            return students;
         }
 
         public Student? GetStudentByIdNumber(string idNumber)
         {
-            return _students.FirstOrDefault(s => s.IdNumber == idNumber);
+            var key = $"{REDIS_KEY}{idNumber}";
+
+            if (_redisClient.Exists(key))
+            {
+                var jsonString = _redisClient.Get(key);
+                _logger.LogInformation(jsonString);
+                return JsonConvert.DeserializeObject<Student>(jsonString);
+            }
+            return null;
         }
 
         public Student AddStudent(Student newStudent)
         {
-            if (_students.Any(e => e.IdNumber == newStudent.IdNumber))
+            if (GetStudentByIdNumber(newStudent.IdNumber) != null)
             {
                 throw new Exception("學號已存在");
             }
             else if (newStudent != null)
             {
-                _students.Add(newStudent);
+                _redisClient.Set($"{REDIS_KEY}{newStudent.IdNumber}", JsonConvert.SerializeObject(newStudent));
             }
             return newStudent;
         }
 
         public Student UpdateStudent(Student updatedStudent)
         {
-            if (_students.FirstOrDefault(e => e.IdNumber == updatedStudent.IdNumber) is Student memoryStudent)
+            if (GetStudentByIdNumber(updatedStudent.IdNumber) is Student redisStudent)
             {
-                memoryStudent.IdNumber = updatedStudent.IdNumber;
-                memoryStudent.Name = updatedStudent.Name;
-                memoryStudent.ClassName = updatedStudent.ClassName;
-                memoryStudent.Sex = updatedStudent.Sex;
+                redisStudent.IdNumber = updatedStudent.IdNumber;
+                redisStudent.Name = updatedStudent.Name;
+                redisStudent.ClassName = updatedStudent.ClassName;
+                redisStudent.Sex = updatedStudent.Sex;
+                _redisClient.Set($"{REDIS_KEY}{updatedStudent.IdNumber}", redisStudent);
             }
             else
             {
@@ -72,16 +87,15 @@ namespace Homework.Services
 
         public Student DeleteStudent(string idNumber)
         {
-            var studentToRemove = _students.FirstOrDefault(s => s.IdNumber == idNumber);
-            if (studentToRemove != null)
+            if (GetStudentByIdNumber(idNumber) is Student redisStudent)
             {
-                _students.Remove(studentToRemove);
+                _redisClient.Del($"{REDIS_KEY}{idNumber}");
             }
             else
             {
                 throw new NullReferenceException("資料不存在");
             }
-            return studentToRemove;
+            return redisStudent;
         }
     }
 }

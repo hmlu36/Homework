@@ -7,4 +7,13 @@ services:
       context: .
       dockerfile: Homework/Dockerfile
     ports:
-      - "4000:8080"
+      - "4000:5000"
+  redis:
+    restart: always:latest
+    container_name: redis
+    image: redis:alpine
+    command: redis-server --requirepass p@ssw0rd
+    ports:
+    - 6379:6379
+    volumes:
+    - /data/redis-data:/data
